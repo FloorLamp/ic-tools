@@ -117,21 +117,24 @@ const RelationshipGraph = ({
   return render(relationshipGraph, true);
 };
 
-export default function PrincipalDetails({
-  className,
-  principalId,
-  type,
-  principalData,
-  canisterData,
-}: {
+type Props = {
   className?: string;
   principalId: string;
   canisterName?: string;
   type: PrincipalType;
   principalData?: APIPrincipal;
   canisterData?: Canister;
-}) {
+};
+
+export const PrincipalDetails = ({
+  className,
+  principalId,
+  type,
+  principalData,
+  canisterData,
+}: Props) => {
   const { data: allTags } = useTags();
+
   const tags = allTags.private
     .filter((t) => t.principalId === principalId)
     .concat(allTags.public.filter((t) => t.principalId === principalId));
@@ -173,6 +176,16 @@ export default function PrincipalDetails({
       })();
     }
   }, [canisterData]);
+
+  const canisterCreatedDate = useMemo(() => {
+    if (!canisterData?.createdDate) return null;
+    return DateTime.fromISO(canisterData.createdDate);
+  }, [canisterData?.createdDate]);
+
+  const canisterUpdatedDate = useMemo(() => {
+    if (!canisterData?.latestVersionDate) return null;
+    return DateTime.fromISO(canisterData.latestVersionDate);
+  }, [canisterData?.latestVersionDate]);
 
   const accounts =
     principalData?.accounts && principalData.accounts.length > 0
@@ -308,9 +321,7 @@ export default function PrincipalDetails({
                 <td className="px-2 py-2 w-24 sm:w-44">Created</td>
                 <td className="px-2 py-2 flex-1">
                   {canisterData?.createdDate ? (
-                    <TimestampLabel
-                      dt={DateTime.fromISO(canisterData.createdDate)}
-                    />
+                    <TimestampLabel dt={canisterCreatedDate} />
                   ) : (
                     "-"
                   )}
@@ -320,9 +331,7 @@ export default function PrincipalDetails({
                 <td className="px-2 py-2 w-24 sm:w-44">Last Updated</td>
                 <td className="px-2 py-2 flex-1">
                   {canisterData?.latestVersionDate ? (
-                    <TimestampLabel
-                      dt={DateTime.fromISO(canisterData.latestVersionDate)}
-                    />
+                    <TimestampLabel dt={canisterUpdatedDate} />
                   ) : (
                     "-"
                   )}
@@ -406,4 +415,6 @@ export default function PrincipalDetails({
       </table>
     </div>
   );
-}
+};
+
+export default PrincipalDetails;

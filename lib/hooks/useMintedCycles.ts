@@ -14,6 +14,6 @@ export default function useMintedCycles() {
     {
       staleTime: Infinity,
       placeholderData: [],
-    },
+    }
   );
 }

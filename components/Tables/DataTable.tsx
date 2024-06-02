@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { Filters, SortingRule } from "react-table";
 import ClientOnly from "../ClientOnly";
+import SimpleTablePlaceHolder from "./SimpleTableLoader";
 import { CommonTableProps, PAGE_SIZE, TableInner, tablesAtom } from "./Table";
 
 type QueryParams = {
@@ -68,7 +69,9 @@ const DataTableInner = ({
     }
   );
 
-  return (
+  return isFetching ? (
+    <SimpleTablePlaceHolder />
+  ) : (
     <TableInner
       data={data?.rows || []}
       count={data?.count || 0}

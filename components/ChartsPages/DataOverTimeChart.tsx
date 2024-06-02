@@ -19,7 +19,7 @@ const DataOverTimeChart = ({
   isFull?: boolean;
 }) => {
   const { hook, dataKey, heading, curve } = ChartTypes.find(
-    ({ id }) => id === chartId,
+    ({ id }) => id === chartId
   );
 
   const height = isFull ? 400 : 250;
